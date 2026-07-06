@@ -28,7 +28,9 @@ neverallow mtk_hal_c2 { file_type fs_type }:file execute_no_trans;
 # permissions and be isolated from the rest of the system and network.
 # Lengthier explanation here:
 # https://android-developers.googleblog.com/2016/05/hardening-media-stack.html
-neverallow mtk_hal_c2 domain:{ tcp_socket udp_socket rawip_socket } *;
+# su is excluded: A14's add_service macro grants binder services su:tcp_socket
+# on userdebug/eng builds so binder-over-TCP debugging works.
+neverallow mtk_hal_c2 { domain -su }:{ tcp_socket udp_socket rawip_socket } *;
 
 #============= mtk_hal_c2 ==============
 allow mtk_hal_c2 debugfs_ion:dir search;
